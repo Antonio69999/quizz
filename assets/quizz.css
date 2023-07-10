@@ -1,0 +1,11 @@
+body {
+    background-color: blueviolet !important;
+}
+
+h1 {
+    color: azure !important;
+}
+
+.btn {
+    width: 45%;
+}

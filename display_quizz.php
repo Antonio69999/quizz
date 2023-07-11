@@ -2,7 +2,7 @@
 if (!isset($_SESSION['displayed-questions'])) {
     $_SESSION['display_questions'] = array(); #stock id_question qui sont affichés
 }
-?> 
+?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -22,38 +22,61 @@ if (!isset($_SESSION['displayed-questions'])) {
 
                                 $request = $db->prepare('SELECT * FROM questions ORDER BY RAND() LIMIT 1');
                                 $request->execute();
-                                $questions = $request->fetchAll();
-                                shuffle($questions);
-
-                                foreach ($questions as $question) {
-                                    echo ("Question : " . ' ' . $question['question']);
-                                }
+                                $question = $request->fetch();
+                                echo "Question : " . ' ' . $question['question'];
+                                $keyOfQuestion = array_keys($question);
+                                // var_dump($temp);
                                 ?>
         </h1>
     </div>
 
-    <form action="./process/right_traitement.php">
-    <div class="container justify-content-evenly fixed-bottom">
-        <div class="button-wrapper">
-            <?php   #stock les reponses aux questions dans une variable
-            $answers = array($question['rep_true'], 
-            $question['wrong1'], 
-            $question['wrong2'], 
-            $question['wrong3']); 
+    <form action="./process/right_traitement.php" method="post">
+        <div class="container justify-content-evenly fixed-bottom">
+            <div class="button-wrapper">
+                <?php   #stock les reponses aux questions dans une variable
 
-            shuffle($answers); #'mélange' les réponse
+                $answers = [
+                    $keyOfQuestion[4] => $question['rep_true'],
+                    $keyOfQuestion[10] => $question['wrong1'],
+                    $keyOfQuestion[8] => $question['wrong2'],
+                    $keyOfQuestion[6] => $question['wrong3']
+                ];
 
-            #stock les classes des boutons dans une variable et les mélane
-            $buttonClasses = array('btn-danger btn-red', 'btn-warning btn-yellow', 'btn-primary btn-blue', 'btn-success btn-green');
-            shuffle($buttonClasses);
+                function shuffle_assoc($answers)
+                {
+                    $keys = array_keys($answers);
 
-            # permet d'afficher chaques boutons et leur réponses mélangées
-            for ($i = 0; $i < count($answers); $i++) {
-                echo '<button type="submit" class="btn btn-lg ' . $buttonClasses[$i] . '">' . $answers[$i] . '</button>';
-            }
-            ?>
+                    shuffle($keys);
+
+                    foreach ($keys as $key) {
+                        $new[$key] = $answers[$key];
+                    }
+
+                    $answers = $new;
+
+                    return $answers;
+                }
+
+
+
+                $answers = shuffle_assoc($answers); #'mélange' les réponse
+
+                #stock les classes des boutons dans une variable et les mélane
+                $buttonClasses = array('btn-danger btn-red', 'btn-warning btn-yellow', 'btn-primary btn-blue', 'btn-success btn-green');
+                shuffle($buttonClasses);
+
+                # permet d'afficher chaques boutons et leur réponses mélangées
+                foreach ($answers as $key => $answer) {
+                    $numberRand = rand(0, sizeof($buttonClasses) - 1);
+                ?>
+                    <input type="submit" class="btn btn-lg <?php echo $buttonClasses[$numberRand]; ?>" name="<?php echo $key ?>" value="<?php echo $answer; ?>">
+
+                <?php
+                    array_splice($buttonClasses, $numberRand, 1);
+                }
+                ?>
+            </div>
         </div>
-    </div>
     </form>
 
 

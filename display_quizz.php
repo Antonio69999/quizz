@@ -1,12 +1,3 @@
-<?php
-require_once('./utils/connexion.php');
-
-$request = $db->prepare('SELECT * FROM questions ORDER BY RAND() LIMIT 0,2');
-$request->execute();
-$questions = $request->fetchAll();
-?>
-
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -34,21 +25,20 @@ $questions = $request->fetchAll();
         </h1>
     </div>
 
-    <div class="container">
+    <div class="container justify-content-evenly fixed-bottom">
+        <div class="button-wrapper">
+            <?php
+            $answers = array($question['rep_true'], $question['wrong1'], $question['wrong2'], $question['wrong3']);
+            shuffle($answers);
 
-        <div class="col-6">
-            <button class="btn btn-danger btn-lg">Click Me!</button>
-        </div>
-        <div>
-            <button class="btn btn-warning btn-lg">Click Me!</button>
-        </div>
-        <div class="col-6 position-absolute bottom-0 end-0">
-            <button class="btn btn-primary btn-lg">Click Me!</button>
-        </div>
-        <div class="position-absolute bottom-0 start-0">
-            <button class="btn btn-success btn-lg">Click Me!</button>
-        </div>
+            $buttonClasses = array('btn-danger btn-red', 'btn-warning btn-yellow', 'btn-primary btn-blue', 'btn-success btn-green');
+            shuffle($buttonClasses);
 
+            for ($i = 0; $i < count($answers); $i++) {
+                echo '<button class="btn btn-lg ' . $buttonClasses[$i] . '">' . $answers[$i] . '</button>';
+            }
+            ?>
+        </div>
     </div>
 
 

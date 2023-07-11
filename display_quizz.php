@@ -1,3 +1,9 @@
+<?php session_start(); #on démarre une session pour stocker et recuperer les données à travers pls pages 
+if (!isset($_SESSION['displayed-questions'])) {
+    $_SESSION['display_questions'] = array(); #stock id_question qui sont affichés
+}
+?> 
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -17,6 +23,7 @@
                                 $request = $db->prepare('SELECT * FROM questions ORDER BY RAND() LIMIT 1');
                                 $request->execute();
                                 $questions = $request->fetchAll();
+                                shuffle($questions);
 
                                 foreach ($questions as $question) {
                                     echo ("Question : " . ' ' . $question['question']);
@@ -25,21 +32,29 @@
         </h1>
     </div>
 
+    <form action="./process/right_traitement.php">
     <div class="container justify-content-evenly fixed-bottom">
         <div class="button-wrapper">
-            <?php
-            $answers = array($question['rep_true'], $question['wrong1'], $question['wrong2'], $question['wrong3']);
-            shuffle($answers);
+            <?php   #stock les reponses aux questions dans une variable
+            $answers = array($question['rep_true'], 
+            $question['wrong1'], 
+            $question['wrong2'], 
+            $question['wrong3']); 
 
+            shuffle($answers); #'mélange' les réponse
+
+            #stock les classes des boutons dans une variable et les mélane
             $buttonClasses = array('btn-danger btn-red', 'btn-warning btn-yellow', 'btn-primary btn-blue', 'btn-success btn-green');
             shuffle($buttonClasses);
 
+            # permet d'afficher chaques boutons et leur réponses mélangées
             for ($i = 0; $i < count($answers); $i++) {
-                echo '<button class="btn btn-lg ' . $buttonClasses[$i] . '">' . $answers[$i] . '</button>';
+                echo '<button type="submit" class="btn btn-lg ' . $buttonClasses[$i] . '">' . $answers[$i] . '</button>';
             }
             ?>
         </div>
     </div>
+    </form>
 
 
 

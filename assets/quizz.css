@@ -1,0 +1,26 @@
+body {
+    background-color: #6c25be !important;
+    height: 0%;
+    margin: 0;
+    padding: 0;
+}
+
+.button-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: space-evenly;
+    
+}
+
+button {
+    font-size: 60px !important;
+}
+
+h1 {
+    color: azure !important;
+}
+
+.btn {
+    width: 45%;
+}

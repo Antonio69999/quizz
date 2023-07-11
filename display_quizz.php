@@ -1,7 +1,5 @@
 <?php session_start(); #on démarre une session pour stocker et recuperer les données à travers pls pages 
-if (!isset($_SESSION['displayed-questions'])) {
-    $_SESSION['display_questions'] = array(); #stock id_question qui sont affichés
-}
+
 ?> 
 
 <!DOCTYPE html>
@@ -11,6 +9,7 @@ if (!isset($_SESSION['displayed-questions'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="assets/quizz.css">
+    <link href="assets/main.js">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
     <title>QUIZZ</title>
 </head>
@@ -19,20 +18,35 @@ if (!isset($_SESSION['displayed-questions'])) {
     <div class="d-flex justify-content-center text-jusitfy">
         <h1 class="text-center"><?php
                                 require_once('./utils/connexion.php');
+                                #on fetch toutes les questions de la database
+                                if (!isset($_SESSION['asked_questions']) || empty($_SESSION['asked_questions'])) {
+                                    $request = $db->prepare('SELECT * FROM questions');
+                                    $request->execute();
+                                    $questions = $request->fetchAll();
 
-                                $request = $db->prepare('SELECT * FROM questions ORDER BY RAND() LIMIT 1');
-                                $request->execute();
-                                $questions = $request->fetchAll();
-                                shuffle($questions);
+                                    shuffle($questions); #on shuffle les questions
 
-                                foreach ($questions as $question) {
-                                    echo ("Question : " . ' ' . $question['question']);
+                                
+                                $_SESSION['asked_questions'] = $questions; #les questions mélangées sont stocké
+                                }
+                                else {
+                                    $questions = $_SESSION['asked_questions'];
+                                }
+
+                                if (count($questions) > 0) { #condition qui check si il reste encore des questions à afficher
+                                        $question = array_shift($questions); #extrait la première valeur du tableau array et la retourne
+                                        $_SESSION['asked_questions'] = $questions; #on récupere la question du shiftarray et on la stock
+
+                                        echo ("Question: ". $question['question']); #on affiche la question
+                                }
+                                else {
+                                    echo ("Fin");
                                 }
                                 ?>
         </h1>
     </div>
 
-    <form action="./process/right_traitement.php">
+    <form action="./process/right_traitement.php" method="post">
     <div class="container justify-content-evenly fixed-bottom">
         <div class="button-wrapper">
             <?php   #stock les reponses aux questions dans une variable
@@ -49,7 +63,7 @@ if (!isset($_SESSION['displayed-questions'])) {
 
             # permet d'afficher chaques boutons et leur réponses mélangées
             for ($i = 0; $i < count($answers); $i++) {
-                echo '<button type="submit" class="btn btn-lg ' . $buttonClasses[$i] . '">' . $answers[$i] . '</button>';
+                echo '<button id="button" type="submit" class="btn btn-lg ' . $buttonClasses[$i] . '">' . $answers[$i] . '</button>';
             }
             ?>
         </div>

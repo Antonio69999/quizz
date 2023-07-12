@@ -69,13 +69,21 @@ if (!isset($_SESSION['displayed-questions'])) {
                 # permet d'afficher chaques boutons et leur réponses mélangées
                 foreach ($answers as $key => $answer) {
                     $numberRand = rand(0, sizeof($buttonClasses) - 1);
-                ?>
-                    <input type="submit" class="btn btn-lg <?php echo $buttonClasses[$numberRand]; ?>" name="<?php echo $key ?>" value="<?php echo $answer; ?>">
-                    <input type="hidden" name="id" value="<?php $_POST['id_user'] ?>">
+
+                    if ($key === 'rep_true') { ?>
+                        <input type="submit" class="btn btn-lg <?php echo $buttonClasses[$numberRand]; ?>" name="correct" value="<?php echo $answer; ?>">
+                    <?php } else { ?>
+                        <input type="submit" class="btn btn-lg <?php echo $buttonClasses[$numberRand]; ?>" name="wrong" value="<?php echo $answer; ?>">
+                    <?php  } ?>
+
+
+
+
                 <?php
                     array_splice($buttonClasses, $numberRand, 1);
                 }
                 ?>
+                <input type="hidden" name="idQuestion" value="<?php echo $question['id_questions'] ?>">
             </div>
         </div>
     </form>

@@ -11,6 +11,7 @@ if (!isset($_SESSION['displayed-questions'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="assets/quizz.css">
+    <link href="assets/main.js">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
     <title>QUIZZ</title>
 </head>
@@ -68,13 +69,21 @@ if (!isset($_SESSION['displayed-questions'])) {
                 # permet d'afficher chaques boutons et leur réponses mélangées
                 foreach ($answers as $key => $answer) {
                     $numberRand = rand(0, sizeof($buttonClasses) - 1);
-                ?>
-                    <input type="submit" class="btn btn-lg <?php echo $buttonClasses[$numberRand]; ?>" name="<?php echo $key ?>" value="<?php echo $answer; ?>">
+
+                    if ($key === 'rep_true') { ?>
+                        <input type="submit" class="btn btn-lg <?php echo $buttonClasses[$numberRand]; ?>" name="correct" value="<?php echo $answer; ?>">
+                    <?php } else { ?>
+                        <input type="submit" class="btn btn-lg <?php echo $buttonClasses[$numberRand]; ?>" name="wrong" value="<?php echo $answer; ?>">
+                    <?php  } ?>
+
+
+
 
                 <?php
                     array_splice($buttonClasses, $numberRand, 1);
                 }
                 ?>
+                <input type="hidden" name="idQuestion" value="<?php echo $question['id_questions'] ?>">
             </div>
         </div>
     </form>

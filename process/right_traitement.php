@@ -28,7 +28,7 @@ if (!empty($_POST['correct']) || !empty($_POST['wrong'])) {
 
         $insertedId = $db->lastInsertId();
 
-        header('Location: ../quizz_alt.php');   
+        header('Location: ../quizz_alt.php?idQuestion=' . $_POST['idQuestion']);
         
 } else {
         echo "Mauvaise réponse";
@@ -43,7 +43,7 @@ if (!empty($_POST['correct']) || !empty($_POST['wrong'])) {
         ]);
 
         $insertedId = $db->lastInsertId();
-        header('Location: ../quizz_alt.php');   
+        header('Location: ../quizz_alt.php?idQuestion=' . $_POST['idQuestion']);   
 
     }
 }

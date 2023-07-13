@@ -23,9 +23,11 @@ if (!isset($_SESSION['displayed-questions'])) {
     <div class="d-flex justify-content-center text-jusitfy">
         <h1 class="text-center"><?php
                                 require_once('./utils/connexion.php');
-
-                                $request = $db->prepare('SELECT * FROM questions INNER JOIN user_answers WHERE questions.id_questions = user_answers.id_questions');
-                                $request->execute();
+                                $request = $db->prepare('SELECT * FROM questions WHERE id_questions= :id_questions');
+                                // $request = $db->prepare('SELECT * FROM questions INNER JOIN user_answers WHERE questions.id_questions = user_answers.id_questions');
+                                $request->execute([
+                                    ':id_questions' => $_GET['idQuestion'],
+                                ]);
                                 $question = $request->fetch();
                                 echo "Question : " . ' ' . $question['question'];
                                 $keyOfQuestion = array_keys($question);

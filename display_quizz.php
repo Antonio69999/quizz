@@ -113,7 +113,7 @@ if (!isset($_SESSION['displayed-questions'])) {
         }
 
         function redirectScore() {
-            window.location.href = "./quizz_alt.php";
+            window.location.href = "./display_quizz.php";
         }
     </script>
 

@@ -31,6 +31,10 @@ if (!empty($_POST['correct']) || !empty($_POST['wrong'])) {
         if (isset($_POST['correct'])) {
             $_SESSION['score'] = isset($_SESSION['score']) ? $_SESSION['score'] + 1 : 1;
         }
+        
+        // if (isset($_POST['wrong'])) {
+        //     $_SESSION['score'] = isset($_SESSION['score']) ? $_SESSION['score'] - 1 : -1;
+        // }
 
         header('Location: ../quizz_alt.php?idQuestion=' . $_POST['idQuestion']);
         
@@ -45,15 +49,27 @@ if (!empty($_POST['correct']) || !empty($_POST['wrong'])) {
             ':id_user' => $id_users
         ]);
 
-        if (isset($_POST['wrong'])) {
-            $_SESSION['score'] = isset($_SESSION['score']) ? $_SESSION['score'] - 1 : -1;
+        if (isset($_POST['correct'])) {
+            $_SESSION['score'] = isset($_SESSION['score']) ? $_SESSION['score'] + 1 : 1;
         }
+        
+        // if (isset($_POST['wrong'])) {
+        //     $_SESSION['score'] = isset($_SESSION['score']) ? $_SESSION['score'] - 1 : -1;
+        // }
 
         $insertedId = $db->lastInsertId();
         header('Location: ../quizz_alt.php?idQuestion=' . $_POST['idQuestion']);   
 
     }
 }
+
+$score = isset($_SESSION['score']) ? $_SESSION['score'] : 0;
+
+$sql = "INSERT INTO `score` (`score`, `id_user`) VALUES (:score, :id_user)";
+$query = $db->prepare($sql);
+$query->bindValue(':score', $score, PDO::PARAM_INT);
+$query->bindValue(':id_user', $_SESSION['user']['id_user'], PDO::PARAM_INT);
+$query->execute();
 
 ?>
 

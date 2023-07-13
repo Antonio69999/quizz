@@ -11,7 +11,6 @@ if (!isset($_SESSION['displayed-questions'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="assets/quizz.css">
-    <link href="assets/main.js">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
     <title>QUIZZ</title>
 </head>
@@ -31,7 +30,7 @@ if (!isset($_SESSION['displayed-questions'])) {
         </h1>
     </div>
 
-    <form action="./process/right_traitement.php" method="post" id="form">
+    <form action="./process/right_traitement.php" method="post">
         <div class="container justify-content-evenly fixed-bottom">
             <div class="button-wrapper">
                 <?php   #stock les reponses aux questions dans une variable
@@ -84,13 +83,39 @@ if (!isset($_SESSION['displayed-questions'])) {
                 }
                 ?>
                 <input type="hidden" name="idQuestion" value="<?php echo $question['id_questions'] ?>">
+                <div class="container">
+                    <section id="timer">
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-12 col-md-6 countdown-wrapper text-center mb20">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <div class="card-block">
+                                            <div id=countdown>
+                                                <span id="sec" class="timer bg-primary"><input type="text" id="timerInput" readonly></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                </div>
             </div>
-        </div>
     </form>
 
 
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+    <script src="./assets/timer.js"></script>
+    <script>
+        function updateTimerValue(value) {
+            document.getElementById("timerInput").value = value;
+        }
+
+        function redirectScore() {
+            window.location.href = "./quizz_alt.php";
+        }
+    </script>
 
 </body>
 

@@ -38,24 +38,22 @@ if (!isset($_SESSION['displayed-questions'])) {
     <div>
         <h2>LA BONNE REPONSE EST :</h2>
         <p>
-            <?php
-            $score = isset($_SESSION['score']) ? $_SESSION['score'] : 0;
-            echo $score;
-            
-            $id_users = $_SESSION['user']['id_user'];
-            $score = isset($_SESSION['score']) ? $_SESSION['score'] : 0;
-    
-            $sql = "INSERT INTO scores (score, id_user) VALUES (:score, :id_user)";
-            $query = $db->prepare($sql);
-            $query->execute([
-                ':score' => $score,
-                ':id_user' => $id_users
-            ]);
-    
-            $insertedId = $db->lastInsertId();
+        <?php
+        $id_users = $_SESSION['user']['id_user'];
+        $score = isset($_SESSION['score']) ? $_SESSION['score'] : 0;
 
-            ?>
-        </p>
+        $sql = "INSERT INTO `scores` (`score`, `id_user`) VALUES (:score, :id_user)";
+        $query = $db->prepare($sql);
+        $query->execute([
+            ':score' => $score,
+            ':id_user' => $id_users
+        ]);
+
+        $insertedId = $db->lastInsertId();
+
+        echo $score;
+        ?>
+    </p>
     </div>
 
     <form action="./process/alt_traitement.php" method="post">

@@ -91,6 +91,8 @@ if (!isset($_SESSION['displayed-questions'])) {
             </div>
         </div>
     </form>
+    <a href="./charts.php">Stats</a>
+
 
 
 

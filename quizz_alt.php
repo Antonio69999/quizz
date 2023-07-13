@@ -20,78 +20,96 @@ if (!isset($_SESSION['displayed-questions'])) {
 </head>
 
 <body>
-    <div class="d-flex justify-content-center text-jusitfy">
-        <h1 class="text-center"><?php
-                                require_once('./utils/connexion.php');
-                                $request = $db->prepare('SELECT * FROM questions WHERE id_questions= :id_questions');
-                                // $request = $db->prepare('SELECT * FROM questions INNER JOIN user_answers WHERE questions.id_questions = user_answers.id_questions');
-                                $request->execute([
-                                    ':id_questions' => $_GET['idQuestion'],
-                                ]);
-                                $question = $request->fetch();
-                                echo "Question : " . ' ' . $question['question'];
-                                $keyOfQuestion = array_keys($question);
-                                // var_dump($temp);
-                                ?>
-        </h1>
-    </div>
-    <div>
-        <h2>LA BONNE REPONSE EST :</h2>
-        <p>
-        <?php
-        $id_users = $_SESSION['user']['id_user'];
-        $score = isset($_SESSION['score']) ? $_SESSION['score'] : 0;
-
-        $sql = "INSERT INTO `scores` (`score`, `id_user`) VALUES (:score, :id_user)";
-        $query = $db->prepare($sql);
-        $query->execute([
-            ':score' => $score,
-            ':id_user' => $id_users
-        ]);
-
-        $insertedId = $db->lastInsertId();
-
-        
-        echo $score;
-        ?>
-    </p>
-    </div>
-
-    <form action="./process/alt_traitement.php" method="post">
-        <div class="container justify-content-evenly fixed-bottom">
-            <div class="button-wrapper">
-                <?php   #stock les reponses aux questions dans une variable
-
-                $answers = [
-                    $keyOfQuestion[4] => $question['rep_true'],
-                    $keyOfQuestion[10] => $question['wrong1'],
-                    $keyOfQuestion[8] => $question['wrong2'],
-                    $keyOfQuestion[6] => $question['wrong3']
-                ];
-
-
-                #stock les classes des boutons dans une variable
-                $buttonClasses = array('btn-danger btn-red', 'btn-success btn-green');
-
-                # permet d'afficher chaques boutons et leur réponses mélangées
-                foreach ($answers as $key => $answer) {
-
-                    if ($key === 'rep_true') { ?>
-                        <input type="button" class="btn btn-lg <?php echo $buttonClasses[1]; ?>" name="correct" value="<?php echo $answer; ?>">
-                    <?php } else { ?>
-                        <input type="button" class="btn btn-lg <?php echo $buttonClasses[0]; ?>" name="wrong" value="<?php echo $answer; ?>">
-                    <?php  } ?>
-
-
-
-
-                <?php
-                }
-                ?>
-                <input type="hidden" name="idQuestion" value="<?php echo $question['id_questions'] ?>">
+    <div class="container d-flex justify-content-center text-center">
+        <div class="row">
+            <div class="my-5">
+                <h1 class="text-center"><?php
+                                        require_once('./utils/connexion.php');
+                                        $request = $db->prepare('SELECT * FROM questions WHERE id_questions= :id_questions');
+                                        // $request = $db->prepare('SELECT * FROM questions INNER JOIN user_answers WHERE questions.id_questions = user_answers.id_questions');
+                                        $request->execute([
+                                            ':id_questions' => $_GET['idQuestion'],
+                                        ]);
+                                        $question = $request->fetch();
+                                        echo "Question : " . ' ' . $question['question'];
+                                        $keyOfQuestion = array_keys($question);
+                                        // var_dump($temp);
+                                        ?>
+                </h1>
             </div>
+
+            <div class="container row d-flex justify-content-center">
+                <div class="col-12 d-flex justify-content-center mb-4">
+                    <h2>LA BONNE REPONSE EST :</h2>
+                </div>
+                <br>
+                <div class="col-12 d-flex justify-content-center my-4">
+                    <h3 class="score">Voici votre score actuel :
+
+                        <?php
+                        $id_users = $_SESSION['user']['id_user'];
+                        $score = isset($_SESSION['score']) ? $_SESSION['score'] : 0;
+
+                        $sql = "INSERT INTO `scores` (`score`, `id_user`) VALUES (:score, :id_user)";
+                        $query = $db->prepare($sql);
+                        $query->execute([
+                            ':score' => $score,
+                            ':id_user' => $id_users
+                        ]);
+
+                        $insertedId = $db->lastInsertId();
+
+
+                        echo $score;
+                        ?>
+                    </h3>
+                </div>
+            </div>
+
+
+            <div class="container d-flex justify-content-center mt-2">
+                <form action="./display_quizz.php" method="post">
+                    <input type="submit" class="btn btn-light w-100" name="suivant" value="Question suivante ➜">
+                </form>
+            </div>
+
+            <form action="./process/alt_traitement.php" method="post">
+                <div class="container justify-content-evenly fixed-bottom">
+                    <div class="button-wrapper gap-3">
+                        <?php   #stock les reponses aux questions dans une variable
+
+                        $answers = [
+                            $keyOfQuestion[4] => $question['rep_true'],
+                            $keyOfQuestion[10] => $question['wrong1'],
+                            $keyOfQuestion[8] => $question['wrong2'],
+                            $keyOfQuestion[6] => $question['wrong3']
+                        ];
+
+
+                        #stock les classes des boutons dans une variable
+                        $buttonClasses = array('btn-danger btn-red', 'btn-success btn-green');
+
+                        # permet d'afficher chaques boutons et leur réponses mélangées
+                        foreach ($answers as $key => $answer) {
+
+                            if ($key === 'rep_true') { ?>
+                                <input type="button" class="btn btn-lg <?php echo $buttonClasses[1]; ?>" name="correct" value="<?php echo $answer; ?>">
+                            <?php } else { ?>
+                                <input type="button" class="btn btn-lg <?php echo $buttonClasses[0]; ?>" name="wrong" value="<?php echo $answer; ?>">
+                            <?php  } ?>
+
+
+
+
+                        <?php
+                        }
+                        ?>
+                        <input type="hidden" name="idQuestion" value="<?php echo $question['id_questions'] ?>">
+                    </div>
+                </div>
+            </form>
         </div>
-    </form>
+    </div>
 
 
 

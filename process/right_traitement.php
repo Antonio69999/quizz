@@ -1,9 +1,5 @@
-<?php var_dump($_POST); ?>
-var
+<?php session_start(); ?>
 
-<?php session_start(); 
-var_dump($_SESSION);
-?>
 <?php require_once('../utils/connexion.php'); ?>
 
 <?php
@@ -21,6 +17,7 @@ if ( !empty($_POST['correct']) || !empty($_POST['wrong'])) {
 
     
     if (isset($_POST['correct'])) {
+        echo "Bonne réponse";
         $id_users = $_SESSION['user']['id_user'];
 
         $sql = "INSERT INTO `user_answers` (`user_answer`, `id_questions`, `id_user`) VALUES (:correct, :idQuestion, :id_user)";
@@ -32,6 +29,7 @@ if ( !empty($_POST['correct']) || !empty($_POST['wrong'])) {
         ]);
 
         $insertedId = $db->lastInsertId();
+        header('Location: ../quizz_alt.php');
 
 
     } else {
@@ -47,6 +45,7 @@ if ( !empty($_POST['correct']) || !empty($_POST['wrong'])) {
         ]);
 
         $insertedId = $db->lastInsertId();
+        header('Location: ../quizz_alt.php');
     }
 }
 

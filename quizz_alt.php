@@ -37,6 +37,12 @@ if (!isset($_SESSION['displayed-questions'])) {
     </div>
     <div>
         <h2>LA BONNE REPONSE EST :</h2>
+        <p>
+        <?php
+        $score = isset($_SESSION['score']) ? $_SESSION['score'] : 0;
+        echo $score;
+        ?>
+    </p>
     </div>
 
     <form action="./process/alt_traitement.php" method="post">

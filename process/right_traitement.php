@@ -45,10 +45,6 @@ if (!empty($_POST['correct']) || !empty($_POST['wrong'])) {
             ':id_user' => $id_users
         ]);
 
-        // if (isset($_POST['wrong'])) {
-        //     $_SESSION['score'] = isset($_SESSION['score']) ? $_SESSION['score'] - 1 : -1;
-        // }
-
         $insertedId = $db->lastInsertId();
         header('Location: ../quizz_alt.php?idQuestion=' . $_POST['idQuestion']);   
 

@@ -31,7 +31,7 @@ if (!isset($_SESSION['displayed-questions'])) {
         </h1>
     </div>
 
-    <form action="./process/right_traitement.php" method="post">
+    <form action="./process/right_traitement.php" method="post" id="form">
         <div class="container justify-content-evenly fixed-bottom">
             <div class="button-wrapper">
                 <?php   #stock les reponses aux questions dans une variable

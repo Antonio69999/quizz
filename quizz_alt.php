@@ -51,7 +51,6 @@ if (!isset($_SESSION['displayed-questions'])) {
 
         $insertedId = $db->lastInsertId();
 
-        
         echo $score;
         ?>
     </p>

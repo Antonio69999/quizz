@@ -28,10 +28,13 @@ if (!empty($_POST['correct']) || !empty($_POST['wrong'])) {
 
         $insertedId = $db->lastInsertId();
 
-        header('Location: ../quizz_alt.php');   
+        if (isset($_POST['correct'])) {
+            $_SESSION['score'] = isset($_SESSION['score']) ? $_SESSION['score'] + 1 : 1;
+        }
+
+        header('Location: ../quizz_alt.php?idQuestion=' . $_POST['idQuestion']);
         
 } else {
-        echo "Mauvaise réponse";
         $id_users = $_SESSION['user']['id_user'];
 
         $sql = "INSERT INTO `user_answers` (`user_answer`, `id_questions`, `id_user`) VALUES (:wrong, :idQuestion, :id_user)";
@@ -42,8 +45,12 @@ if (!empty($_POST['correct']) || !empty($_POST['wrong'])) {
             ':id_user' => $id_users
         ]);
 
+        // if (isset($_POST['wrong'])) {
+        //     $_SESSION['score'] = isset($_SESSION['score']) ? $_SESSION['score'] - 1 : -1;
+        // }
+
         $insertedId = $db->lastInsertId();
-        header('Location: ../quizz_alt.php');   
+        header('Location: ../quizz_alt.php?idQuestion=' . $_POST['idQuestion']);   
 
     }
 }
